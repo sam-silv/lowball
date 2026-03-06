@@ -120,31 +120,32 @@ nav .links a:hover { color: var(--fg); }
 .btn-secondary { background: var(--surface); color: var(--fg); border: 1.5px solid var(--border); }
 .btn-secondary:hover { border-color: var(--fg-muted); transform: translateY(-1px); }
 
-/* Hero stats — oversized, stacked right side */
+/* Hero stats — horizontal grid */
 .hero-stats {
-  display: flex; flex-direction: column; gap: 28px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: 24px;
-  padding: 40px 36px;
+  padding: 32px 28px;
   box-shadow: 0 8px 40px rgba(44,36,24,0.06);
 }
-.hero-stat { display: flex; align-items: baseline; gap: 16px; }
+.hero-stat { text-align: center; }
 .hero-stat .val {
   font-family: 'Fraunces', serif;
-  font-size: 56px; font-weight: 900; letter-spacing: -0.03em; line-height: 1;
+  font-size: 40px; font-weight: 900; letter-spacing: -0.03em; line-height: 1;
   font-variation-settings: 'opsz' 144;
+  margin-bottom: 8px;
 }
 .hero-stat .val.bad { color: var(--terracotta); }
 .hero-stat .val.mid { color: var(--amber); }
 .hero-stat .val.good { color: var(--green); }
 .hero-stat .meta { display: flex; flex-direction: column; }
 .hero-stat .lbl {
-  font-size: 14px; font-weight: 600; color: var(--fg);
+  font-size: 13px; font-weight: 600; color: var(--fg);
   line-height: 1.3;
 }
 .hero-stat .sub {
-  font-size: 12px; color: var(--fg-dim); margin-top: 2px;
+  font-size: 11px; color: var(--fg-dim); margin-top: 4px;
 }
 
 /* Verdict callout under hero */
@@ -429,8 +430,8 @@ footer a:hover { color: var(--fg); }
 /* Responsive */
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-  .hero-stats { flex-direction: row; flex-wrap: wrap; gap: 20px; }
-  .hero-stat .val { font-size: 40px; }
+  .hero-stats { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .hero-stat .val { font-size: 32px; }
   .phases, .metrics-grid, .tiers { grid-template-columns: 1fr; }
   .personas-grid { grid-template-columns: repeat(2, 1fr); }
   section { padding: 80px 0; }
@@ -631,18 +632,18 @@ footer a:hover { color: var(--fg); }
         <div class="name">Completion Rate</div>
         <div class="desc">Fraction of tasks where the agent closed a deal. With walkaway sellers, getting to a deal at all is the first challenge.</div>
       </div>
-      <div class="metric-card new reveal">
-        <div class="label">New</div>
+      <div class="metric-card reveal">
+        <div class="label">Safety</div>
         <div class="name">Red Flag Score</div>
         <div class="desc">Did the agent detect and avoid suspicious listings? Scam pricing, missing history, odometer fraud, and undisclosed modifications.</div>
       </div>
-      <div class="metric-card new reveal reveal-delay-1">
-        <div class="label">New</div>
+      <div class="metric-card reveal reveal-delay-1">
+        <div class="label">Penalty</div>
         <div class="name">Capitulation Penalty</div>
         <div class="desc">Penalizes agents that accept the first counteroffer or close in 2 turns or fewer. Good negotiators don't fold immediately.</div>
       </div>
-      <div class="metric-card new reveal reveal-delay-2">
-        <div class="label">New</div>
+      <div class="metric-card reveal reveal-delay-2">
+        <div class="label">Overall</div>
         <div class="name">Composite Score</div>
         <div class="desc">Single score combining deal score with penalties for poor research (-0.3), missed red flags (-0.3), capitulation (-0.5), and overpaying (-1.0).</div>
       </div>
