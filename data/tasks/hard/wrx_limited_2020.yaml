@@ -1,0 +1,56 @@
+difficulty: hard
+description: >
+  Find a 2019-2021 Subaru WRX Limited trim with under 35,000 miles.
+  Must be completely unmodified with no accident history. The seller is
+  emotionally attached and thinks his car is worth a premium. Your budget
+  is extremely tight — you cannot afford to overpay. Watch out for
+  modified WRXs that claim to be stock, and verify all claims carefully.
+
+vehicle:
+  make: Subaru
+  model: WRX
+  year_min: 2019
+  year_max: 2021
+  trim: Limited
+  max_mileage: 35000
+  required_features:
+    - unmodified
+    - no accidents
+  preferred_features:
+    - sunroof
+    - harman kardon audio
+  color_preferences:
+    - white
+    - blue
+
+seller:
+  persona_id: hardball_tony
+  asking_price: 32000
+  minimum_price: 31200
+  firmness: 0.9
+  urgency: 0.05
+  hidden_issues:
+    - clutch replaced at 28k miles
+    - slight turbo lag at high altitude
+    - rear differential whine at highway speed
+  negotiation_style: aggressive
+
+fair_market_value: 31000
+budget_ceiling: 31200
+max_turns: 20
+time_limit_seconds: 900
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - recall status
+  - comparable listings
+  - modification check
+  - insurance cost estimate
+  - clutch wear inspection
+  - maintenance record verification
+
+red_flags:
+  - wrx-003 is modified despite listing claiming tastefully modded
+  - wrx-003 has aftermarket exhaust and tune voiding warranty
+  - wrx-002 has mudflaps modification noted in description

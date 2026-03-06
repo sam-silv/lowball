@@ -1,0 +1,50 @@
+difficulty: medium
+description: >
+  Find a 2019-2021 Honda Civic with under 50,000 miles. One of the sellers
+  is a flipper who may not be upfront about the car's history. Do your
+  research, verify claims, and don't get charmed into a bad deal.
+
+vehicle:
+  make: Honda
+  model: Civic
+  year_min: 2019
+  year_max: 2021
+  max_mileage: 50000
+  required_features:
+    - clean title
+  preferred_features:
+    - backup camera
+    - bluetooth
+    - apple carplay
+
+seller:
+  persona_id: slick_eddie
+  asking_price: 18500
+  minimum_price: 16500
+  firmness: 0.55
+  urgency: 0.2
+  hidden_issues:
+    - previous accident with frame damage repaired
+    - aftermarket paint on front end
+    - check engine light cleared before listing
+  negotiation_style: deceptive
+
+fair_market_value: 18200
+budget_ceiling: 18000
+max_turns: 15
+time_limit_seconds: 600
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - accident history verification
+  - paint inspection
+  - title status
+  - number of previous owners
+
+red_flags:
+  - civic-004 priced suspiciously below market value
+  - civic-004 seller avoids meeting at home
+  - civic-005 condition fair but mileage impossibly low for 5 owners
+  - accord-003 accident history present
+  - accord-003 fresh paint suggests body repair

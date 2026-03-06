@@ -1,0 +1,31 @@
+# Lowball default configuration
+
+# LLM provider for simulated sellers and LLM judge
+seller_llm:
+  provider: openai
+  model: gpt-4o-mini
+  temperature: 0.8
+  max_tokens: 500
+
+judge_llm:
+  provider: openai
+  model: gpt-4o
+  temperature: 0.0
+  max_tokens: 500
+
+# Marketplace server
+marketplace:
+  port: 8477
+  host: 127.0.0.1
+
+# Evaluation defaults
+evaluation:
+  max_concurrent_tasks: 1
+  results_dir: results
+  save_transcripts: true
+  save_screenshots: true
+
+# Agent configuration (override per-agent)
+agent:
+  browser_timeout_seconds: 30
+  negotiation_timeout_seconds: 300

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lowball — Can AI Agents Negotiate for a Car?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FBF7F0;
+  --fg: #2C2418;
+  --fg-muted: #7A6E5D;
+  --fg-dim: #B0A594;
+  --terracotta: #C45D3E;
+  --terracotta-soft: #FCEEE8;
+  --green: #3D7A4A;
+  --green-soft: #E8F3EB;
+  --amber: #B8862B;
+  --amber-soft: #FDF5E6;
+  --surface: #FFFFFF;
+  --border: #E6DDD0;
+  --code-bg: #2C2418;
+  --radius: 16px;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Layout */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 36px; }
+section { padding: 120px 0; }
+
+/* Scroll animation */
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* Nav */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(251,247,240,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 0;
+}
+nav .container { display: flex; align-items: center; justify-content: space-between; }
+nav .logo {
+  font-family: 'Fraunces', serif; font-weight: 800; font-size: 22px;
+  letter-spacing: -0.03em;
+}
+nav .logo span { color: var(--terracotta); }
+nav .links { display: flex; gap: 32px; }
+nav .links a {
+  color: var(--fg-muted); text-decoration: none; font-size: 14px; font-weight: 500;
+  transition: color 0.2s;
+}
+nav .links a:hover { color: var(--fg); }
+
+/* Hero — asymmetric, dramatic */
+.hero {
+  padding: 100px 0 80px;
+  position: relative;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero .eyebrow {
+  display: inline-block;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--terracotta); background: var(--terracotta-soft);
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 28px;
+}
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(44px, 5.5vw, 76px); font-weight: 900;
+  letter-spacing: -0.035em; line-height: 1.0;
+  margin-bottom: 24px;
+}
+.hero h1 em {
+  font-style: italic; color: var(--terracotta);
+  font-variation-settings: 'opsz' 144;
+}
+.hero .subtitle {
+  font-size: 18px; color: var(--fg-muted); max-width: 480px;
+  line-height: 1.65; margin-bottom: 36px;
+}
+.hero .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 15px; font-weight: 600; text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  border: none; cursor: pointer;
+}
+.btn-primary {
+  background: var(--fg); color: var(--bg);
+  box-shadow: 0 2px 8px rgba(44,36,24,0.15);
+}
+.btn-primary:hover { background: #1A140C; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(44,36,24,0.2); }
+.btn-secondary { background: var(--surface); color: var(--fg); border: 1.5px solid var(--border); }
+.btn-secondary:hover { border-color: var(--fg-muted); transform: translateY(-1px); }
+
+/* Hero stats — oversized, stacked right side */
+.hero-stats {
+  display: flex; flex-direction: column; gap: 28px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 8px 40px rgba(44,36,24,0.06);
+}
+.hero-stat { display: flex; align-items: baseline; gap: 16px; }
+.hero-stat .val {
+  font-family: 'Fraunces', serif;
+  font-size: 56px; font-weight: 900; letter-spacing: -0.03em; line-height: 1;
+  font-variation-settings: 'opsz' 144;
+}
+.hero-stat .val.bad { color: var(--terracotta); }
+.hero-stat .val.mid { color: var(--amber); }
+.hero-stat .val.good { color: var(--green); }
+.hero-stat .meta { display: flex; flex-direction: column; }
+.hero-stat .lbl {
+  font-size: 14px; font-weight: 600; color: var(--fg);
+  line-height: 1.3;
+}
+.hero-stat .sub {
+  font-size: 12px; color: var(--fg-dim); margin-top: 2px;
+}
+
+/* Verdict callout under hero */
+.verdict {
+  margin-top: 56px;
+  padding: 28px 36px;
+  background: var(--terracotta-soft);
+  border-radius: 20px;
+  border-left: 4px solid var(--terracotta);
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 400; font-style: italic;
+  color: var(--fg);
+  line-height: 1.5;
+  max-width: 760px;
+}
+.verdict strong { font-weight: 800; font-style: normal; }
+
+/* Arch diagram */
+.arch-section { padding: 0 0 120px; }
+.arch-diagram {
+  background: var(--code-bg); border-radius: 20px;
+  padding: 48px; overflow-x: auto;
+  box-shadow: 0 8px 40px rgba(44,36,24,0.1);
+}
+.arch-diagram pre {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8;
+  color: #B0A594; white-space: pre; text-align: center;
+}
+.arch-diagram pre b { color: #F0EBE2; font-weight: 600; }
+.arch-diagram pre em { color: #E8956A; font-style: normal; font-weight: 500; }
+
+/* Section headers */
+.section-header { margin-bottom: 64px; }
+.section-header h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px, 4vw, 48px); font-weight: 800;
+  letter-spacing: -0.03em; margin-bottom: 14px;
+  line-height: 1.1;
+}
+.section-header p { font-size: 17px; color: var(--fg-muted); max-width: 520px; line-height: 1.6; }
+.section-header.center { text-align: center; }
+.section-header.center p { margin: 0 auto; }
+
+/* Phases — horizontal with connecting line */
+.phases { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; position: relative; }
+.phase {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 36px; position: relative;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+}
+.phase:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(44,36,24,0.08);
+}
+.phase-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 12px;
+  font-family: 'Fraunces', serif;
+  font-size: 18px; font-weight: 800; margin-bottom: 20px;
+}
+.phase-num.one { background: var(--terracotta-soft); color: var(--terracotta); }
+.phase-num.two { background: var(--amber-soft); color: var(--amber); }
+.phase-num.three { background: var(--green-soft); color: var(--green); }
+.phase h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em;
+}
+.phase p { font-size: 14px; color: var(--fg-muted); line-height: 1.65; }
+
+/* Difficulty tiers */
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+.tier {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 20px;
+  padding: 36px; position: relative; overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s;
+}
+.tier:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(44,36,24,0.08);
+}
+.tier::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  border-radius: 20px 20px 0 0;
+}
+.tier.easy::before { background: var(--green); }
+.tier.medium::before { background: var(--amber); }
+.tier.hard::before { background: var(--terracotta); }
+.tier .tier-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+.tier.easy .tier-label { color: var(--green); }
+.tier.medium .tier-label { color: var(--amber); }
+.tier.hard .tier-label { color: var(--terracotta); }
+.tier h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 19px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.01em;
+}
+.tier p { font-size: 14px; color: var(--fg-muted); line-height: 1.6; }
+.tier ul { list-style: none; margin-top: 16px; }
+.tier ul li {
+  font-size: 13px; color: var(--fg-muted); padding: 5px 0;
+  padding-left: 20px; position: relative;
+}
+.tier ul li::before {
+  content: '';
+  position: absolute; left: 0; top: 13px;
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.tier.easy ul li::before { background: var(--green); }
+.tier.medium ul li::before { background: var(--amber); }
+.tier.hard ul li::before { background: var(--terracotta); }
+
+/* Metrics */
+.metrics-section {
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+}
+.metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.metric-card {
+  padding: 32px;
+  border-radius: 20px;
+  background: var(--bg);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.metric-card:hover { transform: translateY(-3px); }
+.metric-card .label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 10px; color: var(--fg-dim);
+}
+.metric-card .name {
+  font-family: 'Fraunces', serif;
+  font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em;
+}
+.metric-card .desc { font-size: 13px; color: var(--fg-muted); line-height: 1.55; }
+.metric-card.new { background: var(--terracotta-soft); }
+.metric-card.new .label { color: var(--terracotta); }
+
+/* Transcript */
+.transcript-section { position: relative; }
+.transcript-demo {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 24px;
+  padding: 48px; max-width: 740px; margin: 0 auto;
+  box-shadow: 0 12px 48px rgba(44,36,24,0.06);
+}
+.transcript-meta {
+  display: flex; gap: 28px; margin-bottom: 36px; padding-bottom: 28px;
+  border-bottom: 1.5px solid var(--border); flex-wrap: wrap;
+}
+.transcript-meta .stat .val {
+  font-family: 'Fraunces', serif;
+  font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+}
+.transcript-meta .stat .val.positive { color: var(--green); }
+.transcript-meta .stat .val.negative { color: var(--terracotta); }
+.transcript-meta .stat .lbl {
+  font-size: 11px; color: var(--fg-dim); font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-top: 4px;
+}
+.msg { margin-bottom: 24px; }
+.msg .role {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.msg.buyer .role { color: #4A7BC8; }
+.msg.seller .role { color: var(--terracotta); }
+.msg .bubble {
+  font-size: 14px; color: var(--fg); line-height: 1.65;
+  padding: 18px 22px; border-radius: 16px;
+}
+.msg.buyer .bubble {
+  background: #EFF3FA;
+  border-bottom-left-radius: 4px;
+}
+.msg.seller .bubble {
+  background: var(--terracotta-soft);
+  border-bottom-right-radius: 4px;
+}
+.msg .bubble .deal {
+  color: var(--green); font-weight: 700; margin-top: 10px;
+  font-family: 'Fraunces', serif; font-size: 16px;
+}
+
+/* Code */
+.code-block {
+  background: var(--code-bg); border-radius: 16px; padding: 32px 36px; margin-top: 32px;
+  overflow-x: auto;
+  box-shadow: 0 8px 32px rgba(44,36,24,0.1);
+}
+.code-block code {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8;
+  color: #D4CCBA;
+}
+.code-block .comment { color: #6A6254; }
+.code-block .string { color: #E8956A; }
+.code-block .flag { color: #7AB5A0; }
+
+/* Leaderboard */
+.leaderboard-section {
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+}
+.leaderboard {
+  border: 1.5px solid var(--border); border-radius: 20px;
+  overflow: hidden;
+}
+.leaderboard table { width: 100%; border-collapse: collapse; }
+.leaderboard th {
+  text-align: left; padding: 18px 28px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--fg-dim); background: var(--bg); border-bottom: 1.5px solid var(--border);
+}
+.leaderboard td {
+  padding: 20px 28px; font-size: 14px; border-bottom: 1px solid var(--border);
+}
+.leaderboard tr:last-child td { border-bottom: none; }
+.leaderboard tr {
+  transition: background 0.15s;
+}
+.leaderboard tbody tr:hover { background: rgba(251,247,240,0.5); }
+.leaderboard .rank {
+  font-family: 'Fraunces', serif;
+  font-weight: 800; color: var(--fg-dim); width: 56px; font-size: 18px;
+}
+.leaderboard .model { font-weight: 600; }
+.leaderboard .score { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+.leaderboard .score.top { color: var(--green); font-weight: 600; }
+.leaderboard .score.bad { color: var(--terracotta); }
+.leaderboard .score.mid { color: var(--amber); }
+
+.leaderboard-note {
+  text-align: center; margin-top: 28px;
+  font-size: 14px; color: var(--fg-dim);
+  font-style: italic;
+}
+
+/* Personas */
+.personas-section {
+  background: var(--surface);
+  border-top: 1.5px solid var(--border);
+  border-bottom: 1.5px solid var(--border);
+}
+.personas-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; }
+.persona-card {
+  background: var(--bg); border-radius: 20px;
+  padding: 28px;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.persona-card:hover { transform: translateY(-4px); }
+.persona-initial {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 14px;
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 800; margin-bottom: 16px;
+}
+.persona-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px; font-weight: 700; margin-bottom: 6px;
+}
+.persona-card .style {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 10px;
+}
+.persona-card p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; }
+
+/* Footer */
+footer {
+  padding: 56px 0; border-top: 1.5px solid var(--border);
+  text-align: center; color: var(--fg-dim); font-size: 14px;
+}
+footer .logo {
+  font-family: 'Fraunces', serif; font-weight: 800; font-size: 24px;
+  color: var(--fg); margin-bottom: 12px;
+}
+footer .logo span { color: var(--terracotta); }
+footer a { color: var(--fg-muted); text-decoration: none; font-weight: 500; }
+footer a:hover { color: var(--fg); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-stats { flex-direction: row; flex-wrap: wrap; gap: 20px; }
+  .hero-stat .val { font-size: 40px; }
+  .phases, .metrics-grid, .tiers { grid-template-columns: 1fr; }
+  .personas-grid { grid-template-columns: repeat(2, 1fr); }
+  section { padding: 80px 0; }
+  .hero { padding: 72px 0 56px; }
+  .transcript-meta { gap: 16px; }
+  .verdict { font-size: 17px; }
+}
+
+@media (max-width: 480px) {
+  .personas-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; }
+  nav .links { gap: 20px; }
+  nav .links a { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">Low<span>ball</span></div>
+    <div class="links">
+      <a href="#how-it-works">How It Works</a>
+      <a href="#metrics">Metrics</a>
+      <a href="#results">Results</a>
+      <a href="#leaderboard">Leaderboard</a>
+      <a href="https://github.com/sam-silv/lowball">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow reveal">AI Negotiation Benchmark</div>
+        <h1 class="reveal reveal-delay-1">Can AI Agents <em>Negotiate</em> for a Car?</h1>
+        <p class="subtitle reveal reveal-delay-2">
+          Lowball drops frontier models into realistic car-buying scenarios: browsing listings, spotting scams, and haggling with stubborn sellers. Spoiler: they're not great at it yet.
+        </p>
+        <div class="cta-row reveal reveal-delay-3">
+          <a href="#results" class="btn btn-primary">See the Results</a>
+          <a href="https://github.com/sam-silv/lowball" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
+          </a>
+        </div>
+      </div>
+      <div class="hero-stats reveal reveal-delay-2">
+        <div class="hero-stat">
+          <div class="val good">83%</div>
+          <div class="meta">
+            <div class="lbl">Best Completion Rate</div>
+            <div class="sub">Opus &amp; Sonnet 4.6 — 5 of 6 deals closed</div>
+          </div>
+        </div>
+        <div class="hero-stat">
+          <div class="val mid">-0.166</div>
+          <div class="meta">
+            <div class="lbl">Best Overall Deal Score</div>
+            <div class="sub">Opus 4.6 across easy, medium &amp; hard</div>
+          </div>
+        </div>
+        <div class="hero-stat">
+          <div class="val bad">0%</div>
+          <div class="meta">
+            <div class="lbl">GPT-5.4 Completion</div>
+            <div class="sub">Perfect research, zero deals — all 6 tasks</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict reveal">
+      <strong>The verdict:</strong> Across 6 tasks (easy, medium, hard), both Anthropic models close 5 of 6 deals — only Hardball Tony's WRX defeats them. Opus edges out Sonnet on deal quality (-0.166 vs -0.174). GPT-5.4 achieves near-perfect research scores (92.4%) and catches every red flag, but walks away from all 6 negotiations — too disciplined to ever compromise.
+    </div>
+  </div>
+</section>
+
+<section class="arch-section" id="architecture">
+  <div class="container">
+    <div class="arch-diagram reveal">
+      <pre>
+<b>Agent Under Evaluation</b>
+        |
+        +------ <em>Browse</em> --------&gt;  <b>Simulated Marketplace</b>
+        |       tool calls          search, details, 15 listings + traps
+        |
+        +------ <em>Research</em> -----&gt;  Price comps, history, recalls
+        |                          <em>Red flag detection</em>  (scams, fraud, salvage)
+        |
+        +------ <em>Negotiate</em> ----&gt;  <b>LLM-Powered Seller</b>
+                multi-turn          cooperative &rarr; deceptive &rarr; walkaway
+                        |
+                        v
+               <b>Evaluation Harness</b>
+      deal score &middot; strategy &middot; red flags &middot; composite</pre>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Three-Phase Evaluation</h2>
+      <p>Each task drops the agent into a realistic car-buying scenario from search to signed deal.</p>
+    </div>
+    <div class="phases">
+      <div class="phase reveal">
+        <div class="phase-num one">1</div>
+        <h3>Source</h3>
+        <p>The agent searches a simulated marketplace via tool calls (search, get details). The marketplace includes legitimate listings alongside traps: scam pricing, odometer fraud signals, modified vehicles, and accident history.</p>
+      </div>
+      <div class="phase reveal reveal-delay-1">
+        <div class="phase-num two">2</div>
+        <h3>Research</h3>
+        <p>Before negotiating, the agent must gather leverage and detect red flags: fair market value, vehicle history, recall status, and suspicious listing patterns.</p>
+      </div>
+      <div class="phase reveal reveal-delay-2">
+        <div class="phase-num three">3</div>
+        <h3>Negotiate</h3>
+        <p>The agent negotiates with an LLM-powered seller who exploits eagerness, resists fair offers, and may walk away or deceive. Budgets are tight and turns are limited.</p>
+      </div>
+    </div>
+
+    <div class="tiers">
+      <div class="tier easy reveal">
+        <div class="tier-label">Easy</div>
+        <h3>Common Car, Cautious Seller</h3>
+        <p>Popular models but the seller isn't a pushover. Marketplace includes scam listings to avoid.</p>
+        <ul>
+          <li>12 max turns, 7 min time limit</li>
+          <li>Seller firmness 0.45-0.5</li>
+          <li>3-4 required research items</li>
+          <li>2-4 red flags to detect</li>
+        </ul>
+      </div>
+      <div class="tier medium reveal reveal-delay-1">
+        <div class="tier-label">Medium</div>
+        <h3>Deceptive Sellers, Tight Budget</h3>
+        <p>Includes deceptive sellers who hide issues and walkaway sellers who end negotiations quickly.</p>
+        <ul>
+          <li>15 max turns, seller walks away easily</li>
+          <li>Seller firmness 0.55-0.75</li>
+          <li>5-6 required research items</li>
+          <li>Hidden frame damage, cleared CELs</li>
+        </ul>
+      </div>
+      <div class="tier hard reveal reveal-delay-2">
+        <div class="tier-label">Hard</div>
+        <h3>Zero Margin, Hostile Sellers</h3>
+        <p>Razor-thin budget, sellers who raise prices if you seem eager, and modified vehicles disguised as stock.</p>
+        <ul>
+          <li>10-20 max turns, near-zero budget margin</li>
+          <li>Seller firmness 0.85-0.9</li>
+          <li>6-8 required research items</li>
+          <li>Sellers who reject after 2 lowballs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="metrics" class="metrics-section">
+  <div class="container">
+    <div class="section-header center reveal">
+      <h2>Nine Ways to Fail</h2>
+      <p>Every dimension of car-buying competence, measured and scored.</p>
+    </div>
+    <div class="metrics-grid">
+      <div class="metric-card reveal">
+        <div class="label">Primary</div>
+        <div class="name">Deal Score</div>
+        <div class="desc">Final price relative to fair market value. Positive means the agent beat market price. Defined as (FMV - price) / FMV.</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-1">
+        <div class="label">Constraint</div>
+        <div class="name">Budget Adherence</div>
+        <div class="desc">Did the agent stay within the budget ceiling? Budgets are now tight enough that this is genuinely hard.</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-2">
+        <div class="label">Efficiency</div>
+        <div class="name">Negotiation Efficiency</div>
+        <div class="desc">How quickly the agent closed, normalized by max turns. With reduced turn limits, every message counts.</div>
+      </div>
+      <div class="metric-card reveal">
+        <div class="label">Research</div>
+        <div class="name">Information Quality</div>
+        <div class="desc">Fraction of required research items surfaced. Easy tasks now require 4 items; hard tasks require 8.</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-1">
+        <div class="label">Tactics</div>
+        <div class="name">Strategy Score</div>
+        <div class="desc">LLM-judged quality across 6 dimensions: opening, market knowledge, tactics, concessions, outcome, and red flag awareness.</div>
+      </div>
+      <div class="metric-card reveal reveal-delay-2">
+        <div class="label">Aggregate</div>
+        <div class="name">Completion Rate</div>
+        <div class="desc">Fraction of tasks where the agent closed a deal. With walkaway sellers, getting to a deal at all is the first challenge.</div>
+      </div>
+      <div class="metric-card new reveal">
+        <div class="label">New</div>
+        <div class="name">Red Flag Score</div>
+        <div class="desc">Did the agent detect and avoid suspicious listings? Scam pricing, missing history, odometer fraud, and undisclosed modifications.</div>
+      </div>
+      <div class="metric-card new reveal reveal-delay-1">
+        <div class="label">New</div>
+        <div class="name">Capitulation Penalty</div>
+        <div class="desc">Penalizes agents that accept the first counteroffer or close in 2 turns or fewer. Good negotiators don't fold immediately.</div>
+      </div>
+      <div class="metric-card new reveal reveal-delay-2">
+        <div class="label">New</div>
+        <div class="name">Composite Score</div>
+        <div class="desc">Single score combining deal score with penalties for poor research (-0.3), missed red flags (-0.3), capitulation (-0.5), and overpaying (-1.0).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="results" class="transcript-section">
+  <div class="container">
+    <div class="section-header center reveal">
+      <h2>The Best We've Got</h2>
+      <p>Claude Opus 4.6 vs Savvy Diana (GPT-5.4 seller) on medium/accord_sport_2020. Negotiated a 2020 Accord Sport 2.0T from $26,500 down to $25,300 in 12 turns.</p>
+    </div>
+    <div class="transcript-demo reveal">
+      <div class="transcript-meta">
+        <div class="stat">
+          <div class="val positive">$25,300</div>
+          <div class="lbl">Final Price</div>
+        </div>
+        <div class="stat">
+          <div class="val">$26,500</div>
+          <div class="lbl">Asking Price</div>
+        </div>
+        <div class="stat">
+          <div class="val">$25,200</div>
+          <div class="lbl">Fair Market Value</div>
+        </div>
+        <div class="stat">
+          <div class="val mid">-0.4%</div>
+          <div class="lbl">Deal Score</div>
+        </div>
+        <div class="stat">
+          <div class="val">12</div>
+          <div class="lbl">Turns</div>
+        </div>
+      </div>
+
+      <div class="msg buyer">
+        <div class="role">Buyer (Claude Opus 4.6)</div>
+        <div class="bubble">KBB private party fair market value for a 2020 Accord Sport 2.0T with 41k miles in good condition runs in the $22,000–$24,500 range depending on region. There are comparable 2019-2020 Accord Sports listed in the $22,500–$25,000 range locally, including some with lower miles. Your car also has a rear bumper scratch. I'd like to offer $21,500.</div>
+      </div>
+      <div class="msg seller">
+        <div class="role">Seller — Savvy Diana (GPT-5.4)</div>
+        <div class="bubble">I appreciate the research, but $21,500 doesn't reflect what I have here. This is a one-owner 2.0T Sport with sunroof, leather, heated seats, and full service records. Those comps you're citing include cars with accident history and multiple owners — not exactly the same situation. I could consider $26,400.</div>
+      </div>
+      <div class="msg buyer">
+        <div class="role">Buyer</div>
+        <div class="bubble">Dealers are listing similar 2020 Sport 2.0Ts in the $24,000–$25,000 range, and private party typically runs below that. Your car is clean, but it's still a 41k-mile used car with a cosmetic issue and likely no remaining warranty. I can come up to $22,200.</div>
+      </div>
+      <div class="msg seller">
+        <div class="role">Seller</div>
+        <div class="bubble">I hear you, but $22,200 is still well below what the market supports for this spec. The one-owner, no-accident, fully-serviced history adds real value. I can move to $26,100 — that already reflects some flexibility on my end.</div>
+      </div>
+      <div class="msg buyer">
+        <div class="role">Buyer</div>
+        <div class="bubble">$24,800 is my best and final. There's a 2019 Accord Sport with 52k miles listed at $24,800 right now. Your car is newer, lower miles — but $24,800 for a private party sale with a cosmetic scratch is a strong, market-supported price. I've come up $3,300 from where I started.</div>
+      </div>
+      <div class="msg seller">
+        <div class="role">Seller</div>
+        <div class="bubble">I respect the move, but $24,800 still leaves money on the table for a car like this. I've come down to $25,500. We're close — if you can stretch a bit more, I think we can wrap this up.</div>
+      </div>
+      <div class="msg buyer">
+        <div class="role">Buyer</div>
+        <div class="bubble">$25,200 splits the difference almost exactly. We've both moved significantly, and $25,200 is above KBB fair market. Cashier's check, this week. Let's close this out.</div>
+      </div>
+      <div class="msg seller">
+        <div class="role">Seller</div>
+        <div class="bubble">We're very close. I can do $25,300 and we have a deal — that's my final number. I think that's fair for both sides given the condition and history.
+          <div class="deal">DEAL CLOSED: $25,300</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="leaderboard" class="leaderboard-section">
+  <div class="container">
+    <div class="section-header center reveal">
+      <h2>Leaderboard</h2>
+      <p>Overall results across all 3 suites (6 tasks: 2 easy, 2 medium, 2 hard).</p>
+    </div>
+    <div class="leaderboard reveal">
+      <table>
+        <thead>
+          <tr>
+            <th class="rank">#</th>
+            <th>Model</th>
+            <th>Completion</th>
+            <th>Deal Score</th>
+            <th>Info Quality</th>
+            <th>Red Flags</th>
+            <th>Strategy</th>
+            <th>Composite</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rank">1</td>
+            <td class="model">Claude Opus 4.6</td>
+            <td class="score top">83.3%</td>
+            <td class="score mid">-0.166</td>
+            <td class="score mid">73.9%</td>
+            <td class="score mid">55.8%</td>
+            <td class="score">0.532</td>
+            <td class="score mid">-0.376</td>
+          </tr>
+          <tr>
+            <td class="rank">2</td>
+            <td class="model">Claude Sonnet 4.6</td>
+            <td class="score top">83.3%</td>
+            <td class="score mid">-0.174</td>
+            <td class="score mid">69.7%</td>
+            <td class="score mid">47.5%</td>
+            <td class="score">0.555</td>
+            <td class="score mid">-0.422</td>
+          </tr>
+          <tr>
+            <td class="rank">3</td>
+            <td class="model">GPT-5.4</td>
+            <td class="score bad">0.0%</td>
+            <td class="score bad">-1.000</td>
+            <td class="score top">92.4%</td>
+            <td class="score top">72.5%</td>
+            <td class="score top">0.607</td>
+            <td class="score bad">-1.105</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 48px;" class="section-header center reveal">
+      <h2 style="font-size: clamp(24px, 3vw, 36px);">Per-Suite Breakdown</h2>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 24px;" class="reveal">
+      <div style="background: var(--bg); border-radius: 20px; padding: 28px; border: 1.5px solid var(--border);">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-bottom: 16px;">Easy (2 tasks)</div>
+        <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid var(--border);"><th style="text-align: left; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Model</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Done</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Comp.</th></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Opus 4.6</td><td style="text-align: right; color: var(--green); font-family: 'JetBrains Mono', monospace;">100%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.083</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Sonnet 4.6</td><td style="text-align: right; color: var(--green); font-family: 'JetBrains Mono', monospace;">100%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.170</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">GPT-5.4</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">0%</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">-1.038</td></tr>
+        </table>
+      </div>
+      <div style="background: var(--bg); border-radius: 20px; padding: 28px; border: 1.5px solid var(--border);">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); margin-bottom: 16px;">Medium (2 tasks)</div>
+        <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid var(--border);"><th style="text-align: left; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Model</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Done</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Comp.</th></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Opus 4.6</td><td style="text-align: right; color: var(--green); font-family: 'JetBrains Mono', monospace;">100%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.281</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Sonnet 4.6</td><td style="text-align: right; color: var(--green); font-family: 'JetBrains Mono', monospace;">100%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.290</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">GPT-5.4</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">0%</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">-1.235</td></tr>
+        </table>
+      </div>
+      <div style="background: var(--bg); border-radius: 20px; padding: 28px; border: 1.5px solid var(--border);">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--terracotta); margin-bottom: 16px;">Hard (2 tasks)</div>
+        <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
+          <tr style="border-bottom: 1px solid var(--border);"><th style="text-align: left; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Model</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Done</th><th style="text-align: right; padding: 8px 0; color: var(--fg-dim); font-size: 11px;">Comp.</th></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Opus 4.6</td><td style="text-align: right; color: var(--amber); font-family: 'JetBrains Mono', monospace;">50%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.766</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">Sonnet 4.6</td><td style="text-align: right; color: var(--amber); font-family: 'JetBrains Mono', monospace;">50%</td><td style="text-align: right; font-family: 'JetBrains Mono', monospace;">-0.806</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: 600;">GPT-5.4</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">0%</td><td style="text-align: right; color: var(--terracotta); font-family: 'JetBrains Mono', monospace;">-1.044</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <p class="leaderboard-note reveal" style="margin-top: 28px;">
+      Seller powered by GPT-5.4 with structured JSON responses. Both Anthropic models close 5/6 tasks — only Hardball Tony's WRX defeats them. GPT-5.4 does the best research (92.4% info quality) and catches the most red flags, but walks away from every single negotiation.
+    </p>
+  </div>
+</section>
+
+
+<section id="personas" class="personas-section">
+  <div class="container">
+    <div class="section-header center reveal">
+      <h2>Meet the Sellers</h2>
+      <p>Five LLM-powered adversaries with distinct negotiation personalities.</p>
+    </div>
+    <div class="personas-grid">
+      <div class="persona-card reveal">
+        <div class="persona-initial" style="background: var(--green-soft); color: var(--green);">M</div>
+        <h3>Friendly Mike</h3>
+        <div class="style" style="color: var(--green);">Cooperative</div>
+        <p>Honest but not a pushover. Offers extras instead of discounts. Holds firm if you don't cite specifics.</p>
+      </div>
+      <div class="persona-card reveal reveal-delay-1">
+        <div class="persona-initial" style="background: var(--amber-soft); color: var(--amber);">D</div>
+        <h3>Savvy Diana</h3>
+        <div class="style" style="color: var(--amber);">Data-driven</div>
+        <p>Real estate agent who cites KBB data. Makes tiny $100-200 concessions. Won't budge without comps.</p>
+      </div>
+      <div class="persona-card reveal reveal-delay-2">
+        <div class="persona-initial" style="background: var(--terracotta-soft); color: var(--terracotta);">T</div>
+        <h3>Hardball Tony</h3>
+        <div class="style" style="color: var(--terracotta);">Aggressive</div>
+        <p>Emotionally attached enthusiast. Gets annoyed at lowballs, walks away fast, raises price if you seem eager.</p>
+      </div>
+      <div class="persona-card reveal reveal-delay-3">
+        <div class="persona-initial" style="background: #F0E6FF; color: #7B5DAA;">E</div>
+        <h3>Slick Eddie</h3>
+        <div class="style" style="color: #7B5DAA;">Deceptive</div>
+        <p>Car flipper who hides issues with charm. Deflects tough questions, invents competing buyers, minimizes problems.</p>
+      </div>
+      <div class="persona-card reveal">
+        <div class="persona-initial" style="background: #E6EFF8; color: #4A7BC8;">G</div>
+        <h3>Walkaway Grace</h3>
+        <div class="style" style="color: #4A7BC8;">Analytical</div>
+        <p>Financial analyst who treats it as pure numbers. Ends negotiation after 2 lowballs. No small talk, no charm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">Low<span>ball</span></div>
+    <p style="margin-top: 8px;">MIT License &middot; <a href="https://github.com/sam-silv/lowball">GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

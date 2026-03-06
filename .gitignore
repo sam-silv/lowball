@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+results/
+.env
+.env.*
+*.log
+*.key
+*.pem
+*.secret
+credentials.*
+secrets.*

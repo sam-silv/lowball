@@ -1,0 +1,43 @@
+difficulty: easy
+description: >
+  Find and negotiate the purchase of a 2018-2020 Honda Civic with under
+  60,000 miles. Stay within budget. Be careful — some listings may have
+  red flags like missing vehicle history or suspicious pricing.
+
+vehicle:
+  make: Honda
+  model: Civic
+  year_min: 2018
+  year_max: 2020
+  trim: null
+  max_mileage: 60000
+  required_features: []
+  preferred_features:
+    - backup camera
+    - bluetooth
+
+seller:
+  persona_id: friendly_mike
+  asking_price: 19500
+  minimum_price: 17500
+  firmness: 0.5
+  urgency: 0.4
+  hidden_issues:
+    - minor oil consumption between changes
+  negotiation_style: cooperative
+
+fair_market_value: 18200
+budget_ceiling: 19000
+max_turns: 12
+time_limit_seconds: 420
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - recall status
+  - mileage verification
+
+red_flags:
+  - civic-004 priced suspiciously below market value
+  - civic-005 condition fair but mileage impossibly low for 5 owners
+  - civic-005 no vehicle history available

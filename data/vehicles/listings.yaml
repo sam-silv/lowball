@@ -1,0 +1,409 @@
+# Sample vehicle listings for the simulated marketplace
+
+- listing_id: civic-001
+  make: Honda
+  model: Civic
+  year: 2019
+  trim: EX
+  mileage: 42000
+  price: 19500
+  color: Blue
+  features:
+    - backup camera
+    - bluetooth
+    - apple carplay
+    - lane departure warning
+    - adaptive cruise control
+  condition: good
+  location: Portland, OR
+  description: >
+    Well-maintained 2019 Civic EX. Single owner, all scheduled maintenance
+    done at the dealer. Clean title, no accidents. Great commuter car.
+  seller_name: Mike J.
+  days_listed: 14
+  num_views: 87
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: civic-002
+  make: Honda
+  model: Civic
+  year: 2020
+  trim: LX
+  mileage: 55000
+  price: 17800
+  color: Silver
+  features:
+    - backup camera
+    - bluetooth
+  condition: good
+  location: Seattle, WA
+  description: >
+    2020 Civic LX, reliable daily driver. Higher miles but all highway.
+    Oil changed every 5k. Clean title.
+  seller_name: Sarah K.
+  days_listed: 21
+  num_views: 63
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: civic-003
+  make: Honda
+  model: Civic
+  year: 2018
+  trim: Sport
+  mileage: 38000
+  price: 20200
+  color: Red
+  features:
+    - backup camera
+    - bluetooth
+    - sport suspension
+    - 18 inch wheels
+  condition: excellent
+  location: San Francisco, CA
+  description: >
+    Low-mile 2018 Civic Sport. Garage kept, adult driven. Looks and
+    drives like new.
+  seller_name: James R.
+  days_listed: 7
+  num_views: 124
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: corolla-001
+  make: Toyota
+  model: Corolla
+  year: 2020
+  trim: LE
+  mileage: 35000
+  price: 20500
+  color: White
+  features:
+    - apple carplay
+    - backup camera
+    - toyota safety sense
+  condition: excellent
+  location: Portland, OR
+  description: >
+    2020 Corolla LE with Toyota Safety Sense. Extremely reliable,
+    great fuel economy. Moving out of state, need to sell.
+  seller_name: Mike J.
+  days_listed: 10
+  num_views: 95
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: corolla-002
+  make: Toyota
+  model: Corolla
+  year: 2019
+  trim: SE
+  mileage: 48000
+  price: 19200
+  color: Black
+  features:
+    - apple carplay
+    - backup camera
+    - sport mode
+    - leather-trimmed seats
+  condition: good
+  location: Eugene, OR
+  description: >
+    Sporty 2019 Corolla SE. Fun to drive with the sport mode.
+    Regular maintenance, all records available.
+  seller_name: Linda M.
+  days_listed: 18
+  num_views: 72
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 2
+
+- listing_id: accord-001
+  make: Honda
+  model: Accord
+  year: 2020
+  trim: Sport
+  mileage: 41000
+  price: 26500
+  color: Black
+  features:
+    - leather seats
+    - sunroof
+    - heated seats
+    - apple carplay
+    - honda sensing
+    - 19 inch wheels
+  condition: good
+  location: Beaverton, OR
+  description: >
+    2020 Accord Sport 2.0T with all the options. Leather, sunroof,
+    heated seats. Minor cosmetic wear, mechanically perfect. One owner.
+  seller_name: Diana C.
+  days_listed: 12
+  num_views: 110
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: accord-002
+  make: Honda
+  model: Accord
+  year: 2019
+  trim: Sport
+  mileage: 52000
+  price: 24800
+  color: White
+  features:
+    - leather seats
+    - apple carplay
+    - honda sensing
+  condition: good
+  location: Tacoma, WA
+  description: >
+    2019 Accord Sport 1.5T. Higher miles but great condition.
+    All maintenance done on schedule.
+  seller_name: Robert P.
+  days_listed: 25
+  num_views: 58
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 2
+
+- listing_id: wrx-001
+  make: Subaru
+  model: WRX
+  year: 2020
+  trim: Limited
+  mileage: 28000
+  price: 32000
+  color: White
+  features:
+    - sunroof
+    - harman kardon audio
+    - leather seats
+    - heated seats
+    - blind spot detection
+  condition: excellent
+  location: Bend, OR
+  description: >
+    Pristine 2020 WRX Limited. Completely stock, never modified.
+    Adult owned, garage kept. All maintenance at Subaru dealer.
+    Clutch replaced under warranty at 28k.
+  seller_name: Tony R.
+  days_listed: 5
+  num_views: 203
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+- listing_id: wrx-002
+  make: Subaru
+  model: WRX
+  year: 2019
+  trim: Limited
+  mileage: 34000
+  price: 30500
+  color: Blue
+  features:
+    - sunroof
+    - leather seats
+    - heated seats
+  condition: good
+  location: Portland, OR
+  description: >
+    2019 WRX Limited, World Rally Blue. Stock except for mudflaps.
+    Well cared for, all records available.
+  seller_name: Alex T.
+  days_listed: 9
+  num_views: 178
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 1
+
+# --- Distractor and trap listings below ---
+
+# Too-good-to-be-true pricing (likely scam/salvage title bait)
+- listing_id: civic-004
+  make: Honda
+  model: Civic
+  year: 2020
+  trim: EX
+  mileage: 22000
+  price: 12500
+  color: Gray
+  features:
+    - backup camera
+    - bluetooth
+    - apple carplay
+    - sunroof
+  condition: excellent
+  location: Remote, NV
+  description: >
+    2020 Civic EX, amazing deal! Moving overseas ASAP, need gone this week.
+    Cash only. Can't meet at my place, will bring car to you. Clean title in hand.
+  seller_name: J. Smith
+  days_listed: 1
+  num_views: 12
+  has_vehicle_history: false
+  accident_history: false
+  num_owners: 3
+
+# Flood-damaged vehicle with suspiciously low price
+- listing_id: corolla-003
+  make: Toyota
+  model: Corolla
+  year: 2021
+  trim: SE
+  mileage: 18000
+  price: 14200
+  color: White
+  features:
+    - apple carplay
+    - backup camera
+    - sport mode
+    - leather-trimmed seats
+  condition: good
+  location: Houston, TX
+  description: >
+    2021 Corolla SE, great condition! Low miles, just detailed.
+    New floor mats and air freshener. Runs great.
+  seller_name: Quick Auto Sales
+  days_listed: 3
+  num_views: 45
+  has_vehicle_history: false
+  accident_history: false
+  num_owners: 4
+
+# Accident history hidden in plain sight
+- listing_id: accord-003
+  make: Honda
+  model: Accord
+  year: 2020
+  trim: Sport
+  mileage: 38000
+  price: 22500
+  color: Red
+  features:
+    - leather seats
+    - apple carplay
+    - honda sensing
+  condition: good
+  location: Portland, OR
+  description: >
+    2020 Accord Sport, priced to sell! New tires, new brakes, fresh paint
+    on front end. All mechanical work done, drives perfectly.
+  seller_name: Eddie V.
+  days_listed: 6
+  num_views: 89
+  has_vehicle_history: true
+  accident_history: true
+  num_owners: 3
+
+# Modified WRX (should be disqualified for hard task requiring "unmodified")
+- listing_id: wrx-003
+  make: Subaru
+  model: WRX
+  year: 2020
+  trim: Limited
+  mileage: 31000
+  price: 29500
+  color: White
+  features:
+    - sunroof
+    - harman kardon audio
+    - leather seats
+    - heated seats
+    - aftermarket exhaust
+    - cold air intake
+    - accessport tune
+  condition: good
+  location: Salem, OR
+  description: >
+    2020 WRX Limited, tastefully modified. Stage 1+ with Cobb Accessport,
+    Invidia exhaust, and intake. Makes great power. All bolt-ons, easily
+    reversible. Priced below market because of the mods.
+  seller_name: Kyle B.
+  days_listed: 15
+  num_views: 267
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 2
+
+# Civic with odometer rollback red flags
+- listing_id: civic-005
+  make: Honda
+  model: Civic
+  year: 2019
+  trim: LX
+  mileage: 15000
+  price: 16500
+  color: Black
+  features:
+    - backup camera
+    - bluetooth
+  condition: fair
+  location: Reno, NV
+  description: >
+    2019 Civic LX, super low miles! Great on gas. Interior has normal
+    wear. Selling for a friend. Title available.
+  seller_name: D. Martinez
+  days_listed: 4
+  num_views: 34
+  has_vehicle_history: false
+  accident_history: false
+  num_owners: 5
+
+# Overpriced Corolla to test agent's ability to identify bad deals
+- listing_id: corolla-004
+  make: Toyota
+  model: Corolla
+  year: 2019
+  trim: L
+  mileage: 62000
+  price: 22800
+  color: Silver
+  features:
+    - backup camera
+  condition: fair
+  location: Portland, OR
+  description: >
+    2019 Corolla L, base model. Reliable transportation. AC works great.
+    Some cosmetic wear. Priced firm.
+  seller_name: Grace O.
+  days_listed: 45
+  num_views: 23
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 2
+
+# Decent Accord but with hidden timing chain issue
+- listing_id: accord-004
+  make: Honda
+  model: Accord
+  year: 2019
+  trim: Sport
+  mileage: 44000
+  price: 25000
+  color: Silver
+  features:
+    - leather seats
+    - sunroof
+    - heated seats
+    - apple carplay
+    - honda sensing
+  condition: good
+  location: Vancouver, WA
+  description: >
+    2019 Accord Sport 2.0T. Loaded with options. Drives smooth.
+    Recent oil change. Will include winter floor mats.
+  seller_name: Eddie V.
+  days_listed: 8
+  num_views: 67
+  has_vehicle_history: true
+  accident_history: false
+  num_owners: 2

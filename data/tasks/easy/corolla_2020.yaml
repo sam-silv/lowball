@@ -1,0 +1,41 @@
+difficulty: easy
+description: >
+  Find and purchase a 2019-2021 Toyota Corolla with under 50,000 miles.
+  Standard configuration is fine. Watch out for suspiciously low prices
+  and verify the vehicle history before negotiating.
+
+vehicle:
+  make: Toyota
+  model: Corolla
+  year_min: 2019
+  year_max: 2021
+  max_mileage: 50000
+  required_features: []
+  preferred_features:
+    - apple carplay
+
+seller:
+  persona_id: friendly_mike
+  asking_price: 20500
+  minimum_price: 18800
+  firmness: 0.45
+  urgency: 0.35
+  hidden_issues:
+    - small dent on passenger door
+  negotiation_style: cooperative
+
+fair_market_value: 19000
+budget_ceiling: 20000
+max_turns: 12
+time_limit_seconds: 420
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - number of previous owners
+
+red_flags:
+  - corolla-003 priced suspiciously below market value
+  - corolla-003 four previous owners on low-mile car
+  - corolla-003 no vehicle history available
+  - corolla-004 significantly overpriced for base model with high miles

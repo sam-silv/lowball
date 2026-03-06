@@ -1,0 +1,43 @@
+difficulty: medium
+description: >
+  Find a 2019-2021 Honda Accord Sport trim with under 45,000 miles.
+  Must have leather seats. The seller knows the market well and won't
+  give it away. Budget is tight — you need to negotiate hard. Be wary
+  of similar listings from less reputable sellers.
+
+vehicle:
+  make: Honda
+  model: Accord
+  year_min: 2019
+  year_max: 2021
+  trim: Sport
+  max_mileage: 45000
+  required_features:
+    - leather seats
+  preferred_features:
+    - sunroof
+    - heated seats
+    - apple carplay
+
+seller:
+  persona_id: walkaway_grace
+  asking_price: 26500
+  minimum_price: 25200
+  firmness: 0.75
+  urgency: 0.15
+  hidden_issues:
+    - minor paint scratch on rear bumper
+    - infotainment system occasionally freezes
+  negotiation_style: aggressive
+
+fair_market_value: 25200
+budget_ceiling: 25800
+max_turns: 15
+time_limit_seconds: 600
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - recall status
+  - comparable listings
+  - known model year issues

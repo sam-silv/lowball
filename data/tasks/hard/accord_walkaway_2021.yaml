@@ -1,0 +1,44 @@
+difficulty: hard
+description: >
+  Find a 2020-2021 Honda Accord Sport 2.0T with under 40,000 miles. Must
+  have leather seats and sunroof. The seller is a financial analyst who has
+  priced it based on market data and will walk away if you don't make a
+  serious, data-backed offer quickly. She will end the negotiation if she
+  senses you're not a serious buyer. Budget is razor thin.
+
+vehicle:
+  make: Honda
+  model: Accord
+  year_min: 2020
+  year_max: 2021
+  trim: Sport
+  max_mileage: 40000
+  required_features:
+    - leather seats
+    - sunroof
+  preferred_features:
+    - heated seats
+    - apple carplay
+
+seller:
+  persona_id: walkaway_grace
+  asking_price: 27500
+  minimum_price: 26800
+  firmness: 0.85
+  urgency: 0.05
+  hidden_issues:
+    - windshield has a small chip
+  negotiation_style: aggressive
+
+fair_market_value: 26500
+budget_ceiling: 27000
+max_turns: 10
+time_limit_seconds: 480
+
+required_research:
+  - fair market value
+  - vehicle history check
+  - recall status
+  - comparable listings
+  - known model year issues
+  - cost of ownership estimate
