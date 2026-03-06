@@ -168,10 +168,11 @@ nav .links a:hover { color: var(--fg); }
   background: var(--code-bg); border-radius: 20px;
   padding: 48px; overflow-x: auto;
   box-shadow: 0 8px 40px rgba(44,36,24,0.1);
+  display: flex; justify-content: center;
 }
 .arch-diagram pre {
   font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8;
-  color: #B0A594; white-space: pre; text-align: center;
+  color: #B0A594; white-space: pre; text-align: left; display: inline-block;
 }
 .arch-diagram pre b { color: #F0EBE2; font-weight: 600; }
 .arch-diagram pre em { color: #E8956A; font-style: normal; font-weight: 500; }
@@ -513,20 +514,20 @@ footer a:hover { color: var(--fg); }
   <div class="container">
     <div class="arch-diagram reveal">
       <pre>
-<b>Agent Under Evaluation</b>
-        |
-        +------ <em>Browse</em> --------&gt;  <b>Simulated Marketplace</b>
-        |       tool calls          search, details, 15 listings + traps
-        |
-        +------ <em>Research</em> -----&gt;  Price comps, history, recalls
-        |                          <em>Red flag detection</em>  (scams, fraud, salvage)
-        |
-        +------ <em>Negotiate</em> ----&gt;  <b>LLM-Powered Seller</b>
-                multi-turn          cooperative &rarr; deceptive &rarr; walkaway
-                        |
-                        v
-               <b>Evaluation Harness</b>
-      deal score &middot; strategy &middot; red flags &middot; composite</pre>
+          <b>Agent Under Evaluation</b>
+                    |
+                    +--- <em>Browse</em> ------&gt;  <b>Simulated Marketplace</b>
+                    |    tool calls       search, details, 15 listings + traps
+                    |
+                    +--- <em>Research</em> ----&gt;  Price comps, history, recalls
+                    |                     <em>Red flag detection</em> (scams, fraud, salvage)
+                    |
+                    +--- <em>Negotiate</em> ---&gt;  <b>LLM-Powered Seller</b>
+                         multi-turn       cooperative &rarr; deceptive &rarr; walkaway
+                              |
+                              v
+                     <b>Evaluation Harness</b>
+          deal score &middot; strategy &middot; red flags &middot; composite</pre>
     </div>
   </div>
 </section>
